@@ -23,25 +23,31 @@ fprintf("=#=#=#=\n\n");
 
 xmin_varL = zeros(8, 3);
 
-n = 0;
-l = 0.001;
-fibon(n+1) = fibonacci(n);
-while fibon(n + 1) < (b0 - a0)/l
-    n = n + 1;
-    fibon(n + 1) = fibonacci(n);
-end
-fprintf("----> The chosen n is %d (Fn > (b-a)/l)\n\n", n); 
-
 make_plot = 0;
 for i = 1:8
     
     l = i/200;
+    n = 0;
+    fibon(n+1) = fibonacci(n);
+    while fibon(n + 1) < (b0 - a0)/l
+        n = n + 1;
+        fibon(n + 1) = fibonacci(n);
+    end
+    fprintf("----> The chosen n for l = %1.3f is %d (Fn > (b-a)/l)\n\n", l, n); 
     [xmin_varL(i, 1), ~, ~] = Fibonacci(a0, b0, f1, n, fibon, l, 1, make_plot);
     [xmin_varL(i, 2), ~, ~] = Fibonacci(a0, b0, f2, n, fibon, l, 2, make_plot);
     [xmin_varL(i, 3), ~, ~] = Fibonacci(a0, b0, f3, n, fibon, l, 3, make_plot);
 end
 
 l = 0.01;
+n = 0;
+fibon(n+1) = fibonacci(n);
+while fibon(n + 1) < (b0 - a0)/l
+    n = n + 1;
+    fibon(n + 1) = fibonacci(n);
+end
+fprintf("----> The chosen n for l = %1.3f is %d (Fn > (b-a)/l)\n\n", l, n); 
+
 make_plot = 1;
 [~, akV1, bkV1] = Fibonacci(a0, b0, f1, n, fibon, l, 1, make_plot);
 [~, akV2, bkV2] = Fibonacci(a0, b0, f2, n, fibon, l, 2, make_plot);
