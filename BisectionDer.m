@@ -1,4 +1,4 @@
-function [xmin, akV, bkV] = BisectionDer(a0, b0, f, fd, l, n_f, make_plot)
+function [xmin, akV, bkV, N] = BisectionDer(a0, b0, f, fd, l, n_f, make_plot)
     
     syms x;
     a = a0;
@@ -47,12 +47,14 @@ function [xmin, akV, bkV] = BisectionDer(a0, b0, f, fd, l, n_f, make_plot)
                 ['(l = ', num2str(l), ')']});
         hold off;
         grid on;
+        saveas(gcf, ['BisectionDer_', int2str(n_f),'.pdf']);
     end
     
     xmin = x1;
     ak = a;
     bk = b;
     fmin = f(xmin);
+    N = length(akV);
     
     if make_plot == 1
         fprintf("The minimum of the f%d is %2.6f\n\t at a value %2.6f\n", n_f, xmin, fmin);

@@ -1,4 +1,4 @@
-function [xmin, akV, bkV] = GoldenSection(a0, b0, f, l, n_f, make_plot)
+function [xmin, akV, bkV, N] = GoldenSection(a0, b0, f, l, n_f, make_plot)
 
     a = a0;
     b = b0;
@@ -49,12 +49,14 @@ function [xmin, akV, bkV] = GoldenSection(a0, b0, f, l, n_f, make_plot)
                 ['(l = ', num2str(l), ')']});
         hold off;
         grid on;
+        saveas(gcf, ['GoldenSection_', int2str(n_f),'.pdf']);
     end
     
     xmin = (a+b)/2;
     ak = a;
     bk = b;
     fmin = f(xmin);
+    N = length(akV);
     
     if make_plot == 1
         fprintf("The minimum of the f%d is %2.6f\n\t at a value %2.6f\n", n_f, xmin, fmin);
