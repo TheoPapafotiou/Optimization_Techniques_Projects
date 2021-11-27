@@ -1,10 +1,12 @@
-function [xmin, akV, bkV, N] = Fibonacci(a0, b0, f, n, fibon, l, n_f, make_plot)
+function [xmin, akV, bkV, N, n_calc] = Fibonacci(a0, b0, f, n, fibon, l, n_f, make_plot)
 
     a = a0;
     b = b0;
-    x1 = a + (fibon(n-1)/fibon(n+1))*(b - a);
-    x2 = a + (fibon(n)/fibon(n+1))*(b - a);
+    epsilon = 0.001;
+    x1 = a + (fibon(n-2)/fibon(n))*(b - a);
+    x2 = a + (fibon(n-1)/fibon(n))*(b - a);
     
+    n_calc = 2;
     k = 1;
     
     if make_plot == 1
@@ -19,19 +21,30 @@ function [xmin, akV, bkV, N] = Fibonacci(a0, b0, f, n, fibon, l, n_f, make_plot)
     
     akV = a;
     bkV = b;
-    while abs(a - b) > l
+    
+    while k < n-1
         
-        if f(x1) < f(x2)
-            b = x2;
-        elseif f(x1) > f(x2)
-            a = x1;
-        else
-            a = x1;
-            b = x2;
+        if k < n - 2
+            if f(x1) <= f(x2)
+                b = x2;
+                x2 = x1;
+                x1 = a + (fibon(n-k-2)/fibon(n-k))*(b - a);
+                n_calc = n_calc + 1;
+            elseif f(x1) > f(x2)
+                a = x1;
+                x1 = x2;
+                x2 = a + (fibon(n-k-1)/fibon(n-k))*(b - a);
+                n_calc = n_calc + 1;
+            end
+        elseif k == n-2
+            x2 = x1 + epsilon;
+            n_calc = n_calc + 1;
+            if f(x1) <= f(x2)
+                b = x2;
+            elseif f(x1) > f(x2)
+                a = x1;
+            end
         end
-        
-        x1 = a + (fibon(n-k-1)/fibon(n-k+1))*(b - a);
-        x2 = a + (fibon(n-k)/fibon(n-k+1))*(b - a);
         
         if make_plot == 1
             plot((a+b)/2, f((a+b)/2), 'r*');
@@ -39,6 +52,7 @@ function [xmin, akV, bkV, N] = Fibonacci(a0, b0, f, n, fibon, l, n_f, make_plot)
         
         akV = [akV; a];
         bkV = [bkV; b];
+        
         k = k + 1;
     end
     

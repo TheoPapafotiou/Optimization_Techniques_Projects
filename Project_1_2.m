@@ -28,36 +28,37 @@ make_plot = 0;
 for i = 1:8
     
     l = i/200;
-    [xmin_varL(i, 1), ~, ~, N_varL(1)] = GoldenSection(a0, b0, f1, l, 1, make_plot);
-    [xmin_varL(i, 2), ~, ~, N_varL(2)] = GoldenSection(a0, b0, f2, l, 2, make_plot);
-    [xmin_varL(i, 3), ~, ~, N_varL(3)] = GoldenSection(a0, b0, f3, l, 3, make_plot);
+    [xmin_varL(i, 1), ~, ~, N_varL(1), n_calc_varL(1)] = GoldenSection(a0, b0, f1, l, 1, make_plot);
+    [xmin_varL(i, 2), ~, ~, N_varL(2), n_calc_varL(2)] = GoldenSection(a0, b0, f2, l, 2, make_plot);
+    [xmin_varL(i, 3), ~, ~, N_varL(3), n_calc_varL(3)] = GoldenSection(a0, b0, f3, l, 3, make_plot);
     
     for j = 1:3
-        print_table_varL(i, 2*j-1) = round(xmin_varL(i, j), 5);
-        print_table_varL(i, 2*j) = N_varL(j);
+        print_table_varL(i, 3*j-2) = round(xmin_varL(i, j), 5);
+        print_table_varL(i, 3*j-1) = n_calc_varL(j);
+        print_table_varL(i, 3*j) = N_varL(j);
     end
 end
 
 %% Method to be plotted (l = 0.005)
-l1 = 0.0001;
+l1 = 0.005;
 make_plot = 1;
-[~, akV1_1, bkV1_1, N1_1] = GoldenSection(a0, b0, f1, l1, 1, make_plot);
-[~, akV2_1, bkV2_1, N2_1] = GoldenSection(a0, b0, f2, l1, 2, make_plot);
-[~, akV3_1, bkV3_1, N3_1] = GoldenSection(a0, b0, f3, l1, 3, make_plot);
+[~, akV1_1, bkV1_1, N1_1, n_calc1_1] = GoldenSection(a0, b0, f1, l1, 1, make_plot);
+[~, akV2_1, bkV2_1, N2_1, n_calc2_1] = GoldenSection(a0, b0, f2, l1, 2, make_plot);
+[~, akV3_1, bkV3_1, N3_1, n_calc3_1] = GoldenSection(a0, b0, f3, l1, 3, make_plot);
 
 %% Method to be plotted (l = 0.05)
-l2 = 0.01;
+l2 = 0.05;
 make_plot = 0;
-[~, akV1_2, bkV1_2, N1_2] = GoldenSection(a0, b0, f1, l2, 1, make_plot);
-[~, akV2_2, bkV2_2, N2_2] = GoldenSection(a0, b0, f2, l2, 2, make_plot);
-[~, akV3_2, bkV3_2, N3_2] = GoldenSection(a0, b0, f3, l2, 3, make_plot);
+[~, akV1_2, bkV1_2, N1_2, n_calc1_2] = GoldenSection(a0, b0, f1, l2, 1, make_plot);
+[~, akV2_2, bkV2_2, N2_2, n_calc2_2] = GoldenSection(a0, b0, f2, l2, 2, make_plot);
+[~, akV3_2, bkV3_2, N3_2, n_calc3_2] = GoldenSection(a0, b0, f3, l2, 3, make_plot);
 
 %% Figures ak, bk (l = 0.005)
 
 figure()
 hold on;
 title({'Golden Section Method Process (f1)';
-        ['(l = ', num2str(l1), ', N = ', num2str(N1_1),')']});
+        ['(l = ', num2str(l1), ', N = ', num2str(N1_1), ', n_{calc} = ', num2str(n_calc1_1),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV1_1, '-.k');
@@ -75,7 +76,7 @@ saveas(gcf, 'GoldenSection_AB_1_1.pdf');
 figure()
 hold on;
 title({'Golden Section Method Process (f2)';
-        ['(l = ', num2str(l1), ', N = ', num2str(N2_1),')']});
+        ['(l = ', num2str(l1), ', N = ', num2str(N2_1), ', n_{calc} = ', num2str(n_calc2_1),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV2_1, '-.k');
@@ -93,7 +94,7 @@ saveas(gcf, 'GoldenSection_AB_2_1.pdf');
 figure()
 hold on;
 title({'Golden Section Method Process (f3)';
-        ['(l = ', num2str(l1), ', N = ', num2str(N3_1),')']});
+        ['(l = ', num2str(l1), ', N = ', num2str(N3_1), ', n_{calc} = ', num2str(n_calc3_1),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV3_1, '-.k');
@@ -113,7 +114,7 @@ saveas(gcf, 'GoldenSection_AB_3_1.pdf');
 figure()
 hold on;
 title({'Golden Section Method Process (f1)';
-        ['(l = ', num2str(l2), ', N = ', num2str(N1_2),')']});
+        ['(l = ', num2str(l2), ', N = ', num2str(N1_2), ', n_{calc} = ', num2str(n_calc1_2),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV1_2, '-.k');
@@ -131,7 +132,7 @@ saveas(gcf, 'GoldenSection_AB_1_2.pdf');
 figure()
 hold on;
 title({'Golden Section Method Process (f2)';
-        ['(l = ', num2str(l2), ', N = ', num2str(N2_2),')']});
+        ['(l = ', num2str(l2), ', N = ', num2str(N2_2), ', n_{calc} = ', num2str(n_calc2_2),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV2_2, '-.k');
@@ -149,7 +150,7 @@ saveas(gcf, 'GoldenSection_AB_2_2.pdf');
 figure()
 hold on;
 title({'Golden Section Method Process (f3)';
-        ['(l = ', num2str(l2), ', N = ', num2str(N3_2),')']});
+        ['(l = ', num2str(l2), ', N = ', num2str(N3_2), ', n_{calc} = ', num2str(n_calc3_2),')']});
 xlabel("k");
 ylabel("ak - bk");
 p1 = plot(akV3_2, '-.k');
@@ -187,7 +188,7 @@ for i = 1:8
     color = [rand, rand, rand];
     plot(x3, f3(x3),'*', 'color', color);
 end
-title("Minimum calculated (l == var)");
+title("Minimum calculated (l = var)");
 xlabel("x");
 ylabel("y");
 legend("f1", "f2", "f3");

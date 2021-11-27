@@ -1,4 +1,4 @@
-function [xmin, akV, bkV, N] = GoldenSection(a0, b0, f, l, n_f, make_plot)
+function [xmin, akV, bkV, N, n_calc] = GoldenSection(a0, b0, f, l, n_f, make_plot)
 
     a = a0;
     b = b0;
@@ -6,6 +6,7 @@ function [xmin, akV, bkV, N] = GoldenSection(a0, b0, f, l, n_f, make_plot)
     x1 = a + (1 - gamma)*(b - a);
     x2 = a + gamma*(b - a);
     
+    n_calc = 2;
     k = 1;
     
     if make_plot == 1
@@ -22,17 +23,17 @@ function [xmin, akV, bkV, N] = GoldenSection(a0, b0, f, l, n_f, make_plot)
     bkV = b;
     while abs(a - b) > l
         
-        if f(x1) < f(x2)
+        if f(x1) <= f(x2)
             b = x2;
+            x2 = x1;
+            x1 = a + (1 - gamma)*(b - a);
+            n_calc = n_calc + 1;
         elseif f(x1) > f(x2)
             a = x1;
-        else
-            a = x1;
-            b = x2;
+            x1 = x2;
+            x2 = a + gamma*(b - a);
+            n_calc = n_calc + 1;
         end
-        
-        x1 = a + (1 - gamma)*(b - a);
-        x2 = a + gamma*(b - a);
         
         if make_plot == 1
             plot((a+b)/2, f((a+b)/2), 'r*');
@@ -42,6 +43,7 @@ function [xmin, akV, bkV, N] = GoldenSection(a0, b0, f, l, n_f, make_plot)
         bkV = [bkV; b];
         k = k + 1;
     end
+    n_calc = n_calc - 1;
     
     if make_plot == 1
         plot((a+b)/2, f((a+b)/2), 'g*');

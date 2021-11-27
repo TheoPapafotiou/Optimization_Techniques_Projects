@@ -1,10 +1,11 @@
-function [xmin, akV, bkV, N] = BisectionNoDer(a0, b0, f, e, l, n_f, make_plot)
+function [xmin, akV, bkV, N, n_calc] = BisectionNoDer(a0, b0, f, e, l, n_f, make_plot)
 
     a = a0;
     b = b0;
     x1 = (a+b)/2 - e;
     x2 = (a+b)/2 + e;
     
+    n_calc = 2;
     k = 0;
     
     if make_plot == 1
@@ -32,6 +33,7 @@ function [xmin, akV, bkV, N] = BisectionNoDer(a0, b0, f, e, l, n_f, make_plot)
         
         x1 = (a+b)/2 - e;
         x2 = (a+b)/2 + e;
+        n_calc = n_calc + 2;
         
         if make_plot == 1
             plot((a+b)/2, f((a+b)/2), 'r*');

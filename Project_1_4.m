@@ -48,14 +48,14 @@ for i = 1:8
 end
 
 %% Method to be plotted (l = 0.005)
-l1 = 0.0001;
+l1 = 0.005;
 make_plot = 1;
 [~, akV1_1, bkV1_1, N1_1] = BisectionDer(a0, b0, f1, f1d, l1, 1, make_plot);
 [~, akV2_1, bkV2_1, N2_1] = BisectionDer(a0, b0, f2, f2d, l1, 2, make_plot);
 [~, akV3_1, bkV3_1, N3_1] = BisectionDer(a0, b0, f3, f3d, l1, 3, make_plot);
 
 %% Method to be plotted (l = 0.05)
-l2 = 0.01;
+l2 = 0.05;
 make_plot = 0;
 [~, akV1_2, bkV1_2, N1_2] = BisectionDer(a0, b0, f1, f1d, l2, 1, make_plot);
 [~, akV2_2, bkV2_2, N2_2] = BisectionDer(a0, b0, f2, f2d, l2, 2, make_plot);
