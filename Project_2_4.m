@@ -1,4 +1,4 @@
-%% ====== Project 2.2 ======
+%% ====== Project 2.4 ======
 %
 % Theodoros Papafotiou
 % AEM: 9708
@@ -11,31 +11,29 @@ clc;
 syms x y
 f = @(x, y) (x.^3).*exp(-(x.^2)-(y.^4));
 gradf = gradient(f, [x, y]);
+hessf = hessian(f, [x, y]);
 
 x0 = [0, -1, 1];
 y0 = [0, -1, 1];
-gamma0 = 1;
+gamma0 = 0.3;
 
 epsilon = 0.01;
 max_steps = 1000;
 
-%% (1) Steepest Descent Method
+%% (3) Levenberg-Marquardt Method
 
 min = zeros(3, 1);
 k = zeros(3, 1);
-points_x = zeros(3, max_steps);
-points_y = zeros(3, max_steps);
 gamma_methods_prints = ["CONSTANT"; "MINIMUM"; "ARMIJO"];
 
 for gamma_method = 1:3
     
-    fprintf('\n=== Steepest Descent Method with gamma: %s ===\n\n', gamma_methods_prints(gamma_method));
+    fprintf('\n=== Levenberg-Marquardt Method with gamma: %s ===\n\n', gamma_methods_prints(gamma_method));
     for i = 1:3
         [min(i), k(i), points_x, points_y] = ...
-            SteepestDescent(f, gradf, x0(i), y0(i), epsilon, gamma_method, gamma0, max_steps);
+            LevMarq(f, gradf, hessf, x0(i), y0(i), epsilon, gamma_method, gamma0, max_steps);
         
         if k(i) > 1
-            
             %% 3D diagram
             figure('PaperPosition',[.25 .25 8 6]);
             k2 = 1:k(i);
@@ -45,13 +43,13 @@ for gamma_method = 1:3
                         " @ [X, Y] = [" + round(points_x(k(i)), 4) + ", " + round(points_y(k(i)), 4) + "]");
             xlabel('k');
             ylabel('f(xk, yk)');
-            title(["Steepest Descent Method"
+            title(["Levenberg-Marquardt Method"
                     "Starting Point: (" + x0(i) + ", " + y0(i)+ ")   |   Epsilon = " + epsilon
                     "Gamma Calculation Method: " + gamma_methods_prints(gamma_method)
                     ]);
             grid on;
-            saveas(gcf,"SD_2D_" + gamma_methods_prints(gamma_method) + '_' + i + '_' + epsilon*1000 + '.pdf');
-            
+            saveas(gcf,"LM_2D_" + gamma_methods_prints(gamma_method) + '_' + i + '_' + epsilon*1000 + '.pdf');
+
             %% 2D diagram
             figure('PaperPosition',[.25 .25 8 6]);
             x = linspace(-4, 4, 100);
@@ -70,13 +68,13 @@ for gamma_method = 1:3
             xlabel('x');
             ylabel('y');
             zlabel('f(x, y)');
-            title(["Steepest Descent Method"
+            title(["Levenberg-Marquardt Method"
                     "Starting Point: (" + x0(i) + ", " + y0(i)+ ")   |   Epsilon = " + epsilon
                     "Gamma Calculation Method: " + gamma_methods_prints(gamma_method)
                     ]);
             legend
             grid on
-            saveas(gcf,"SD_3D_" + gamma_methods_prints(gamma_method) + '_' + i + '_' + epsilon*1000 + '.pdf');
+            saveas(gcf,"LM_3D_" + gamma_methods_prints(gamma_method) + '_' + i + '_' + epsilon*1000 + '.pdf');
         
             %% Contours
             figure('PaperPosition',[.25 .25 8 6]);
@@ -88,4 +86,5 @@ for gamma_method = 1:3
             grid on
         end
     end
+    
 end

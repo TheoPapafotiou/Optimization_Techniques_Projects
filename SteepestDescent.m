@@ -1,42 +1,34 @@
-function [min, k] = SteepestDescent(f1, x0, y0, epsilon, gamma_method, gamma0)
+function [min, k, points_x, points_y] = SteepestDescent(f, gradf, x0, y0, epsilon, gamma_method, gamma0, max_steps)
     
     k = 1;
     
-    xk = [x0; y0];
-    
+    xk = [x0; y0];    
     syms x y
-    f = @(x, y) (x.^3).*exp(-(x.^2)-(y.^4));
-    
-    gradf = gradient(f, [x, y]);
     x = xk(1);
     y = xk(2);
-    scatter(x, y, '*');
-    gradValue = subs(gradf);
+    points_x = x;
+    points_y = y;
     
-    figure()
-    fcontour(f);
-    colorbar
-    hold on;
+    gradValue = subs(gradf);
     
     switch gamma_method
         case 1
             
             gk = gamma0;
             
-            while norm(gradValue) > epsilon
+            while norm(gradValue) > epsilon && k <= max_steps
                 dk = -gradValue;
                 
                 xk = round(double(xk + gk.*dk), 4);
                 x = xk(1);
                 y = xk(2);
-                scatter(x, y, '*');
+                points_x = [points_x; x];
+                points_y = [points_y; y];
                 gradValue = subs(gradf);
                 k = k + 1;
             end
             
-            hold off
-            grid on
-            min = f1(xk(1), xk(2));
+            min = f(xk(1), xk(2));
             fprintf("Minimum is found at z = %1.3f\n", min);
             fprintf("Method finished in k = %d steps\n", k);
             fprintf("-------------------------------------\n\n");
@@ -45,7 +37,7 @@ function [min, k] = SteepestDescent(f1, x0, y0, epsilon, gamma_method, gamma0)
             
             syms gk
             
-            while norm(gradValue) > epsilon
+            while norm(gradValue) > epsilon && k <= max_steps
                 dk = -gradValue;
                 
                 fmin(gk) = f(xk(1) + gk*dk(1), xk(2) + gk*dk(2));
@@ -58,14 +50,13 @@ function [min, k] = SteepestDescent(f1, x0, y0, epsilon, gamma_method, gamma0)
                 xk = round(double(xk + gamma.*dk), 4);
                 x = xk(1);
                 y = xk(2);
-                scatter(x, y, '*');
+                points_x = [points_x; x];
+                points_y = [points_y; y];
                 gradValue = subs(gradf);
                 k = k + 1;
             end
             
-            hold off
-            grid on
-            min = f1(xk(1), xk(2));
+            min = f(xk(1), xk(2));
             fprintf("Minimum is found at z = %1.3f\n", min);
             fprintf("Method finished in k = %d steps\n", k);
             fprintf("-------------------------------------\n\n");
@@ -73,12 +64,12 @@ function [min, k] = SteepestDescent(f1, x0, y0, epsilon, gamma_method, gamma0)
         case 3
             
             mk = 0;
-            a = 10e-3;
-            b = 0.2;
+            a = 10e-2;
+            b = 0.8;
             s = gamma0 * b^mk;
             gamma = gamma0;
             
-            while norm(gradValue) > epsilon
+            while norm(gradValue) > epsilon && k <= max_steps
                 dk = -gradValue;
                 
                 xk_1 = round(double(xk + gamma.*dk), 4);
@@ -92,14 +83,13 @@ function [min, k] = SteepestDescent(f1, x0, y0, epsilon, gamma_method, gamma0)
                 xk = round(double(xk + gamma.*dk), 4);
                 x = xk(1);
                 y = xk(2);
-                scatter(x, y, '*');
+                points_x = [points_x; x];
+                points_y = [points_y; y];
                 gradValue = subs(gradf);
                 k = k + 1;
             end
-            
-            hold off
-            grid on
-            min = f1(xk(1), xk(2));
+
+            min = f(xk(1), xk(2));
             fprintf("Minimum is found at z = %1.3f\n", min);
             fprintf("Method finished in k = %d steps\n", k);
             fprintf("-------------------------------------\n\n");
