@@ -17,7 +17,7 @@ clc;
 numofGaussians = 15;
 chromosomeSize = 5;
 populationSize = 100;
-maxGenerations = 10000;
+maxGenerations = 3000;
 
 genes = zeros(1, chromosomeSize*numofGaussians);
 
@@ -31,6 +31,8 @@ f = @(u1,u2) sin(u1 + u2)*sin(u2^2);
 
 [fMin, fMax] = findExtrema(f, u1Limits, u2Limits);
 alphaLimits = [fMin fMax]; 
+
+population = zeros(populationSize, chromosomeSize*numofGaussians + 1);
 
 fitnessFunctionResults = zeros(populationSize, 1);
 
@@ -62,7 +64,7 @@ for i=1:populationSize
 
 end
 
-population = [genes fitnessFunctionResults];
+population(:, :) = [genes fitnessFunctionResults];
 
 population = sortrows(population, width(population));
 
@@ -103,17 +105,19 @@ randomEnd = randomStart + randomSelections - 1;
 
 while minError(generation) > errorThreshold && generation < maxGenerations
     
-    generation = generation + 1
-    
+    generation = generation + 1;
+    disp(generation)
+        
     bestPopulation = population(1:bestSelections, 1:end-1);
     population(randomStart:randomEnd, 1:end-1) = randomSelection(population(randomStart:end, 1:end-1), randomSelections);
     
     population(randomEnd+1:end, 1:end-1) = crossoverSelection(bestPopulation, crossoverSelections, crossoverMethod(1));
     
-    if rand <= mutationPropability
-        mutatedGeneIndex = randi(populationSize);
-        mutatedGene = population(mutatedGeneIndex, 1:end-1);
-        population(mutatedGeneIndex,1:end-1) = mutation(mutatedGene, chromosomeSize, cLimits, sigmaLimits, alphaLimits);
+    for i = 1:populationSize
+        if rand <= mutationPropability
+            mutatedGene = population(i, 1:end-1);
+            population(i,1:end-1) = mutation(mutatedGene, chromosomeSize, cLimits, sigmaLimits, alphaLimits);
+        end
     end
         
     for i = 1:populationSize
