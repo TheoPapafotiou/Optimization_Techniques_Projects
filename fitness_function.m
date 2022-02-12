@@ -5,7 +5,7 @@ function [fit] = fitness_function(genes, f)
     global min_y
     global max_y
 
-    interval = 20;
+    interval = 30;
 
     fit = 0;
     for x = linspace(min_x, max_x, interval)
