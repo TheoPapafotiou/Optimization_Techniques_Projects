@@ -1,6 +1,7 @@
 function [error_gen, generation, total_duration, selected_chromosome] = ...
                 Genetic_Algorithm(f, error_lim, mutate_prob, num_gaussians, ...
-                                    num_population, max_generations, num_random, num_intact)
+                                    num_population, max_generations, num_random, ...
+                                        num_intact, error_type)
 
     global c_up
     global c_low
@@ -31,7 +32,7 @@ function [error_gen, generation, total_duration, selected_chromosome] = ...
             genes(j+3) = unifrnd(s_low, s_up);
             genes(j+4) = unifrnd(min_F, max_F);
         end
-        population(i, 1) = fitness_function(genes, f);
+        population(i, 1) = fitness_function(genes, f, error_type);
         population(i, 2:end) = genes;
     end
 
@@ -85,7 +86,7 @@ function [error_gen, generation, total_duration, selected_chromosome] = ...
         end
 
         for i = 1:num_population
-            population(i, 1) = fitness_function(population(i, 2:end), f);
+            population(i, 1) = fitness_function(population(i, 2:end), f, error_type);
         end
 
         % Sort based on the first column (fitness values)
@@ -111,5 +112,6 @@ function [error_gen, generation, total_duration, selected_chromosome] = ...
 
     fprintf("Generations demanded: %d\n", generation - 1);
     fprintf("Selected Chromosome Error: %f\n", selected_chromosome_error);
+    
 
 end

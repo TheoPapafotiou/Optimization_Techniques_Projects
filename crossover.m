@@ -1,7 +1,5 @@
 function [output_chromosome1, output_chromosome2] = crossover(first_chromosome, second_chromosome)
 
-%     output_gene = (first_gene + second_gene) / 2;
-
     length_chrom = length(first_chromosome);
 
     split = round(unifrnd(1, length_chrom));

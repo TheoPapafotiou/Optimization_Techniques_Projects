@@ -4,13 +4,6 @@
 % AEM: 9708
 %
 % ============================
-% ========== TRIALS ==========
-%   - Fitness Function change power
-%   + Change num of gaussians
-%   - Final final with error 0.001 and generations 10000000000000000
-%   + Population numbers (10, 50, 100, 200)
-%   + Random and Best probabilities
-%   + Mutation Probability
 
 clear;
 close all;
@@ -39,10 +32,11 @@ global num_params
 
 f = @(x, y) sin(x + y).*sin(y^2);
 
-error_lim = 0.001;
+error_lim = 0.002;
+error_type = "MSE";
 mutate_prob = 0.1;
 num_gaussians = 15;
-num_population = 100;
+num_population = 50;
 num_params = 5;
 max_generations = 10000;
 
@@ -70,7 +64,7 @@ max_y = 1;
 % Plot test function
 plot_3D(1)
 
-repetitions = 1;
+repetitions = 5;
 data_genetic = zeros(repetitions, (num_params*num_gaussians) + 3);
 durations = zeros(repetitions, 1);
 total_generations = zeros(repetitions, 1);
@@ -82,7 +76,8 @@ for i = 1:repetitions
     
     [fit_gen, generation, duration, best_chromosome] = ...
         Genetic_Algorithm(f, error_lim, mutate_prob, num_gaussians, ...
-                            num_population, max_generations, num_random, num_intact);
+                            num_population, max_generations, num_random, ...
+                                num_intact, error_type);
     
     data_genetic(i, 1) = generation;
     data_genetic(i, 2) = duration;
@@ -107,9 +102,10 @@ annotation('textbox', [0.5, 0.7, 0.1, 0.1], 'BackgroundColor','#32977D', ...
 annotation('textbox', [0.5, 0.65, 0.1, 0.1], 'BackgroundColor','#93ACAA', ...
                     'FaceAlpha', 0.2, 'String', "average final fitness = " + round(mean(data_genetic(:, 3)), 6) ...
                       , 'FitBoxToText','on');
-saveas(gcf, ['plots/error_final_vol3.pdf']);
+saveas(gcf, 'plots/error.pdf');
 
 final_chromosome = data_genetic(repetitions, 4:end);
-str = "_final_vol3";
+str = "_project";
 plot_3D(2, final_chromosome, str)
 plot_3D(3, final_chromosome, str)
+save('final_selected_chromosome.mat', 'final_chromosome')
